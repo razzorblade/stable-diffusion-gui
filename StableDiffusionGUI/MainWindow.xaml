@@ -1,0 +1,47 @@
+﻿<mah:MetroWindow x:Class="StableDiffusionGUI.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mah="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+
+        xmlns:local="clr-namespace:StableDiffusionGUI"
+        mc:Ignorable="d"
+        Title="Stable Diffusion GUI" Height="460" Width="610" Foreground="Black" WindowTitleBrush="#FF777777" Initialized="MetroWindow_Initialized" ResizeMode="CanMinimize" Background="White">
+    <Grid Background="White" Margin="0,0,0,-6">
+
+        <DockPanel>
+            <Menu DockPanel.Dock="Top" Background="White">
+                <MenuItem Header="_File">
+                    <MenuItem Header="_Save" />
+                    <MenuItem x:Name="preferencesMenu" Header="_Preferences" Click="preferencesMenu_Click"/>
+                </MenuItem>
+            </Menu>
+        </DockPanel>
+
+
+        <Button x:Name="generateBtn" Content="Generate" HorizontalAlignment="Right" Margin="0,242,36,0" VerticalAlignment="Top" Height="43" Width="158" FontSize="21" Click="generateBtn_Click"/>
+
+        <TextBox x:Name="promptBox" ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+         ScrollViewer.VerticalScrollBarVisibility="Auto" HorizontalAlignment="Left" Margin="28,30,0,0" PreviewMouseDown="promptBox_PreviewMouseDown" TextAlignment="Center" TextWrapping="Wrap" VerticalAlignment="Top" Width="546" Height="78" FontSize="18" MaxLines="12" MinLines="3" VerticalContentAlignment="Center" LostFocus="promptBox_LostFocus" ScrollViewer.CanContentScroll="True" />
+        <TextBox x:Name="widthBox" HorizontalAlignment="Left" Margin="204,119,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="82" Height="24" FontSize="16" MaxLines="1" Text="512" VerticalContentAlignment="Center"/>
+        <TextBox x:Name="heightBox" HorizontalAlignment="Right" Margin="0,119,36,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="80" Height="24" FontSize="16" MaxLines="1" Text="512" VerticalContentAlignment="Center"/>
+        <TextBlock HorizontalAlignment="Left" Margin="28,119,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="24" Width="156" FontSize="18" TextAlignment="Left"><Run Text="w"/><Run Text="idth"/></TextBlock>
+        <TextBlock HorizontalAlignment="Left" Margin="28,149,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="24" Width="156" FontSize="18" TextAlignment="Left"><Run Language="sk-sk" Text="n_iter"/></TextBlock>
+        <TextBox x:Name="niterBox" HorizontalAlignment="Left" Margin="204,149,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="82" Height="24" FontSize="16" MaxLines="1" Text="4" VerticalContentAlignment="Center"/>
+        <TextBlock HorizontalAlignment="Left" Margin="28,178,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="25" Width="156" FontSize="18" TextAlignment="Left"><Run Language="sk-sk" Text="n_samples"/></TextBlock>
+        <TextBox x:Name="nsamplesBox" HorizontalAlignment="Left" Margin="204,178,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="82" Height="24" FontSize="16" MaxLines="1" Text="1" VerticalContentAlignment="Center"/>
+        <TextBlock HorizontalAlignment="Left" Margin="28,209,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="24" Width="156" FontSize="18" TextAlignment="Left"><Run Language="sk-sk" Text="seed"/></TextBlock>
+        <TextBox x:Name="seedBox" HorizontalAlignment="Left" Margin="204,209,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="52" Height="24" MaxLines="1" Text="1" VerticalContentAlignment="Center" FontSize="16"/>
+        <Button x:Name="randomizeSeedBtn" Content="RND" HorizontalAlignment="Left" Margin="256,209,0,0" VerticalAlignment="Top" Height="24" Width="30" Click="randomizeSeedBtn_Click"/>
+        <TextBox x:Name="consoleBox" HorizontalAlignment="Left" Margin="28,297,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="546" Height="124" MaxLines="1200000" MinLines="3" IsReadOnly="True" Background="#FFEAEAEA"/>
+        <TextBlock HorizontalAlignment="Right" Margin="0,119,143,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="32" Width="129" FontSize="18" TextAlignment="Left"><Run Language="sk-sk" Text="height"/></TextBlock>
+        <TextBlock HorizontalAlignment="Right" Margin="0,149,116,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="32" Width="156" FontSize="18" TextAlignment="Left"><Run Language="sk-sk" Text="ddim_steps"/></TextBlock>
+        <TextBox x:Name="ddimBox" HorizontalAlignment="Right" Margin="0,149,36,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="80" Height="24" FontSize="16" MaxLines="1" Text="50" VerticalContentAlignment="Center"/>
+        <TextBlock HorizontalAlignment="Right" Margin="0,178,116,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="24" Width="156" FontSize="18" TextAlignment="Left"><Run Language="sk-sk" Text="outdir"/></TextBlock>
+        <Button x:Name="outdirBtn" Content="Set" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" HorizontalAlignment="Right" Margin="0,178,36,0" VerticalAlignment="Top" Height="24" Width="80" Click="outdirBtn_Click" FontSize="14"/>
+        <TextBlock HorizontalAlignment="Right" Margin="0,207,116,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="24" Width="157" FontSize="18" TextAlignment="Left"><Run Language="sk-sk" Text="scale"/></TextBlock>
+        <TextBox x:Name="scaleBox" HorizontalAlignment="Right" Margin="0,207,35,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="81" Height="24" FontSize="16" MaxLines="1" Text="7.5" VerticalContentAlignment="Center"/>
+
+    </Grid>
+</mah:MetroWindow>
