@@ -29,16 +29,22 @@ namespace StableDiffusionGUI
         private void MetroWindow_Initialized(object sender, EventArgs e)
         {
             // update texts
-            if (!string.IsNullOrWhiteSpace(PersistantPreferencesData.AnacondaPath))
+            if (!string.IsNullOrWhiteSpace(PersistentPreferencesData.AnacondaPath))
             {
                 anacondaOkText.Text = "OK";
                 anacondaOkText.Foreground = new SolidColorBrush(Colors.Green);
             }
 
-            if (!string.IsNullOrWhiteSpace(PersistantPreferencesData.Txt2ImgPath))
+            if (!string.IsNullOrWhiteSpace(PersistentPreferencesData.Txt2ImgPath))
             {
                 txt2imgOkText.Text = "OK";
                 txt2imgOkText.Foreground = new SolidColorBrush(Colors.Green);
+            }
+
+            if (!string.IsNullOrWhiteSpace(PersistentPreferencesData.Img2ImgPath))
+            {
+                img2imgOkText.Text = "OK";
+                img2imgOkText.Foreground = new SolidColorBrush(Colors.Green);
             }
         }
 
@@ -46,7 +52,7 @@ namespace StableDiffusionGUI
         {
             var dialog = new Ookii.Dialogs.Wpf.VistaFolderBrowserDialog()
             {
-                SelectedPath = String.IsNullOrWhiteSpace(PersistantPreferencesData.AnacondaPath) ? Directory.GetCurrentDirectory() : PersistantPreferencesData.AnacondaPath,
+                SelectedPath = String.IsNullOrWhiteSpace(PersistentPreferencesData.AnacondaPath) ? Directory.GetCurrentDirectory() : PersistentPreferencesData.AnacondaPath,
                 Multiselect = false,
                 Description = "Select Anaconda installation dir"
             };
@@ -57,20 +63,20 @@ namespace StableDiffusionGUI
             var info = new DirectoryInfo(result);
             if(info.GetDirectories().Any(x => x.Name.Contains("bin")))
             {
-                PersistantPreferencesData.AnacondaPath = result;
+                PersistentPreferencesData.AnacondaPath = result;
                 anacondaOkText.Text = "OK";
                 anacondaOkText.Foreground = new SolidColorBrush(Colors.Green);
 
             }
             else
             {
-                PersistantPreferencesData.AnacondaPath = "";
+                PersistentPreferencesData.AnacondaPath = "";
                 anacondaOkText.Text = "Error";
                 anacondaOkText.Foreground = new SolidColorBrush(Colors.Red);
 
             }
 
-            PersistantPreferencesData.Save();
+            PersistentPreferencesData.Save();
         }
 
         private void selectTxtimgBtn_Click(object sender, RoutedEventArgs e)
@@ -86,20 +92,47 @@ namespace StableDiffusionGUI
             var result = dialog.FileName;
             if (!string.IsNullOrEmpty(result))
             {
-                PersistantPreferencesData.Txt2ImgPath = result;
+                PersistentPreferencesData.Txt2ImgPath = result;
                 txt2imgOkText.Text = "OK";
                 txt2imgOkText.Foreground = new SolidColorBrush(Colors.Green);
 
             }
             else
             {
-                PersistantPreferencesData.Txt2ImgPath = "";
+                PersistentPreferencesData.Txt2ImgPath = "";
                 txt2imgOkText.Text = "Error";
                 txt2imgOkText.Foreground = new SolidColorBrush(Colors.Red);
 
             }
 
-            PersistantPreferencesData.Save();
+            PersistentPreferencesData.Save();
+        }
+
+        private void selectImg2ImgBtn_Click(object sender, RoutedEventArgs e)
+        {
+            var dialog = new Ookii.Dialogs.Wpf.VistaOpenFileDialog()
+            {
+                CheckPathExists = true,
+                Multiselect = false,
+                DefaultExt = "py",
+            };
+            dialog.ShowDialog();
+
+            var result = dialog.FileName;
+            if (!string.IsNullOrEmpty(result))
+            {
+                PersistentPreferencesData.Img2ImgPath = result;
+                img2imgOkText.Text = "OK";
+                img2imgOkText.Foreground = new SolidColorBrush(Colors.Green);
+            }
+            else
+            {
+                PersistentPreferencesData.Img2ImgPath = "";
+                img2imgOkText.Text = "Error";
+                img2imgOkText.Foreground = new SolidColorBrush(Colors.Red);
+            }
+
+            PersistentPreferencesData.Save();
         }
     }
 }

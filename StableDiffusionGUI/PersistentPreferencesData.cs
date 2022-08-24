@@ -8,17 +8,18 @@ using System.Threading.Tasks;
 
 namespace StableDiffusionGUI
 {
-    public static class PersistantPreferencesData
+    public static class PersistentPreferencesData
     {
         public static string AnacondaPath = "";
 
         public static string Txt2ImgPath = "";
+        public static string Img2ImgPath = "";
 
         public static string OutDirPath = "";
 
         public static PreferencesData GetInstance()
         {
-            return new PreferencesData() { AnacondaPath = AnacondaPath, Txt2ImgPath = Txt2ImgPath, OutDirPath = OutDirPath };
+            return new PreferencesData() { AnacondaPath = AnacondaPath, Txt2ImgPath = Txt2ImgPath, OutDirPath = OutDirPath, Img2ImgPath = Img2ImgPath };
         }
 
         public static void Save()
@@ -40,6 +41,7 @@ namespace StableDiffusionGUI
 
             AnacondaPath = deserialized.AnacondaPath;
             Txt2ImgPath = deserialized.Txt2ImgPath;
+            Img2ImgPath = deserialized.Img2ImgPath;
             OutDirPath = deserialized.OutDirPath;
         }
     }
@@ -49,6 +51,7 @@ namespace StableDiffusionGUI
     {
         public string AnacondaPath { get; set; }
         public string Txt2ImgPath { get; set; }
+        public string Img2ImgPath { get; set; }
         public string OutDirPath { get; set; }
 
         public PreferencesData()
@@ -56,6 +59,7 @@ namespace StableDiffusionGUI
             AnacondaPath = "";
             Txt2ImgPath = "";
             OutDirPath = "";
+            Img2ImgPath = "";
         }
     }
 }

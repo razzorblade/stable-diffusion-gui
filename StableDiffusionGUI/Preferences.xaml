@@ -7,14 +7,17 @@
         xmlns:local="clr-namespace:StableDiffusionGUI"
         mc:Ignorable="d"
         Initialized="MetroWindow_Initialized"
-        Title="Stable Diffusion Preferences" Height="120" Width="340" Foreground="White" WindowTitleBrush="#FF9E9E9E" ResizeMode="NoResize" ShowInTaskbar="False" WindowStartupLocation="CenterScreen">
+        Title="Stable Diffusion Preferences" Height="150" Width="340" Foreground="White" WindowTitleBrush="#FF9E9E9E" ResizeMode="NoResize" ShowInTaskbar="False" WindowStartupLocation="CenterScreen">
     <Grid Background="White">
         <TextBlock HorizontalAlignment="Left" Margin="18,16,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="22" Width="161" Foreground="Black" FontSize="16"><Run Text="Anaconda Installation"/><Run Language="sk-sk" Text=":"/></TextBlock>
         <TextBlock x:Name="anacondaOkText" HorizontalAlignment="Left" Margin="179,20,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="22" Width="67" Foreground="Black" FontWeight="Bold" TextAlignment="Center"><Run Language="sk-sk" Text="not set"/></TextBlock>
         <Button x:Name="selectAnacondaBtn" Content="Select" HorizontalAlignment="Left" Margin="251,18,0,0" VerticalAlignment="Top" Width="64" Click="selectAnacondaBtn_Click"/>
         <TextBlock HorizontalAlignment="Left" Margin="18,53,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="22" Width="161" Foreground="Black" FontSize="16"><Run Language="sk-sk" Text="txt2img.py file:"/></TextBlock>
-        <TextBlock x:Name="txt2imgOkText" HorizontalAlignment="Left" Margin="179,53,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="22" Width="67" Foreground="Black" FontWeight="Bold" TextAlignment="Center"><Run Language="sk-sk" Text="not set"/></TextBlock>
+        <TextBlock x:Name="txt2imgOkText" HorizontalAlignment="Left" Margin="179,55,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="22" Width="67" Foreground="Black" FontWeight="Bold" TextAlignment="Center"><Run Language="sk-sk" Text="not set"/></TextBlock>
         <Button x:Name="selectTxtimgBtn" Content="Select" HorizontalAlignment="Left" Margin="251,53,0,0" VerticalAlignment="Top" Width="64" Click="selectTxtimgBtn_Click"/>
+        <TextBlock HorizontalAlignment="Left" Margin="18,88,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="22" Width="161" Foreground="Black" FontSize="16"><Run Language="sk-sk" Text="img"/><Run Text="2img.py file:"/></TextBlock>
+        <TextBlock x:Name="img2imgOkText" HorizontalAlignment="Left" Margin="179,91,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="21" Width="67" Foreground="Black" FontWeight="Bold" TextAlignment="Center"><Run Language="sk-sk" Text="not set"/></TextBlock>
+        <Button x:Name="selectImg2ImgBtn" Content="Select" HorizontalAlignment="Left" Margin="251,89,0,0" VerticalAlignment="Top" Width="64" Click="selectImg2ImgBtn_Click"/>
 
     </Grid>
 </mah:MetroWindow>

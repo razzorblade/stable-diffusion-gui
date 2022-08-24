@@ -12,9 +12,9 @@ namespace StableDiffusionGUI
 {
     public static class ExternalProcessRunner
     {
-        public static void Run(string args, Action<string> callback)
+        public static void Run(string pythonProcess, string args, Action<string> callback)
         {
-            var workingDirectory = Directory.GetParent(new FileInfo(PersistantPreferencesData.Txt2ImgPath).DirectoryName).FullName;
+            var workingDirectory = Directory.GetParent(new FileInfo(PersistentPreferencesData.Txt2ImgPath).DirectoryName).FullName;
             var process = new Process
             {
                 EnableRaisingEvents = true,
@@ -23,7 +23,9 @@ namespace StableDiffusionGUI
                     FileName = "cmd.exe",
                     RedirectStandardOutput = true,
                     RedirectStandardInput = true,
+                    RedirectStandardError = true,
                     UseShellExecute = false,
+                    CreateNoWindow = true,
                     WorkingDirectory = workingDirectory
                 }
             };
@@ -36,24 +38,32 @@ namespace StableDiffusionGUI
                 if (sw.BaseStream.CanWrite)
                 {
                     // Vital to activate Anaconda
-                    var anaconda = PersistantPreferencesData.AnacondaPath.Replace("\\","/");
+                    var anaconda = PersistentPreferencesData.AnacondaPath.Replace("\\","/");
                     sw.WriteLine($"{Path.Join(anaconda, "Scripts/activate.bat")}");
-                    
+
                     // Activate environment
                     sw.WriteLine("activate ldm");
-
                     // run
-                    var pythonFile = PersistantPreferencesData.Txt2ImgPath.Replace("\\","/");
+                    var pythonFile = pythonProcess.Replace("\\", "/");//PersistentPreferencesData.Txt2ImgPath.Replace("\\","/");
                     sw.WriteLine($"python {pythonFile} {args}");
                 }
             }
 
             // read multiple output lines
-             while (!process.StandardOutput.EndOfStream)
+             /*while (!process.StandardOutput.EndOfStream)
              {
                  var line = process.StandardOutput.ReadLine();
                  Console.WriteLine(line);
              }
+             */
+            while (!process.HasExited)
+            {
+                var line = process.StandardOutput.ReadLine();
+                Console.WriteLine(line);
+
+                var err = process.StandardError.ReadLine();
+                Console.WriteLine(err);
+            }
         }
     }
 }
