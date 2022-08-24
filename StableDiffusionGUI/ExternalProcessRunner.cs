@@ -23,13 +23,13 @@ namespace StableDiffusionGUI
                     FileName = "cmd.exe",
                     RedirectStandardOutput = true,
                     RedirectStandardInput = true,
-                    RedirectStandardError = true,
                     UseShellExecute = false,
-                    CreateNoWindow = true,
                     WorkingDirectory = workingDirectory
                 }
             };
             process.Exited += (object? s, EventArgs args) => callback(workingDirectory);
+            process.ErrorDataReceived += Process_ErrorDataReceived;
+            process.OutputDataReceived += Process_OutputDataReceived;
             process.Start();
 
             // Pass multiple commands to cmd.exe
@@ -45,25 +45,35 @@ namespace StableDiffusionGUI
                     sw.WriteLine("activate ldm");
                     // run
                     var pythonFile = pythonProcess.Replace("\\", "/");//PersistentPreferencesData.Txt2ImgPath.Replace("\\","/");
-                    sw.WriteLine($"python {pythonFile} {args}");
+                    sw.WriteLine($"python \"{pythonFile}\" {args}");
                 }
             }
-
+            
             // read multiple output lines
-             /*while (!process.StandardOutput.EndOfStream)
-             {
-                 var line = process.StandardOutput.ReadLine();
-                 Console.WriteLine(line);
-             }
-             */
-            while (!process.HasExited)
+            while (!process.StandardOutput.EndOfStream)
+            {
+                var line = process.StandardOutput.ReadLine();
+                Console.WriteLine(line);
+            }
+             
+            /*while (!process.HasExited)
             {
                 var line = process.StandardOutput.ReadLine();
                 Console.WriteLine(line);
 
                 var err = process.StandardError.ReadLine();
                 Console.WriteLine(err);
-            }
+            }*/
+        }
+
+        private static void Process_OutputDataReceived(object sender, DataReceivedEventArgs e)
+        {
+            Console.WriteLine(e.Data);
+        }
+
+        private static void Process_ErrorDataReceived(object sender, DataReceivedEventArgs e)
+        {
+            Console.WriteLine(e.Data);
         }
     }
 }

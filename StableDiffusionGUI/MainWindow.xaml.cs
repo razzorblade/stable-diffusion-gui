@@ -88,7 +88,7 @@ namespace StableDiffusionGUI
 
             if (!string.IsNullOrEmpty(PersistentPreferencesData.OutDirPath))
             {
-                sb.Append(" --outdir ").Append(PersistentPreferencesData.OutDirPath);
+                sb.Append(" --outdir \"").Append(PersistentPreferencesData.OutDirPath).Append('\"');
             }
 
             if (plmsCheck.IsChecked == true)
@@ -142,7 +142,7 @@ namespace StableDiffusionGUI
 
             if (!string.IsNullOrEmpty(PersistentPreferencesData.OutDirPath))
             {
-                sb.Append(" --outdir ").Append(PersistentPreferencesData.OutDirPath);
+                sb.Append(" --outdir \"").Append(PersistentPreferencesData.OutDirPath).Append('\"');
             }
 
             if (plmsCheck.IsChecked == true)
