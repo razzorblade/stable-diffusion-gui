@@ -20,7 +20,7 @@
                 </MenuItem>
                 <MenuItem Header="_Mode">
                     <MenuItem x:Name="txt2img" Header="_Text to Image" Click="txt2img_Click"/>
-                    <MenuItem x:Name="img2img" Header="_Image to Image" Click="img2img_Click"/>
+                    <MenuItem x:Name="img2img" Header="_Image to Image (experimental)" Click="img2img_Click"/>
                 </MenuItem>
             </Menu>
         </DockPanel>
@@ -34,7 +34,8 @@
             <TextBox x:Name="ddimBox" HorizontalAlignment="Right" Margin="0,149,36,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="80" Height="24" FontSize="16" MaxLines="1" Text="50" VerticalContentAlignment="Center"/>
 
             <TextBlock HorizontalAlignment="Left" Margin="28,240,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="24" Width="156" FontSize="18" TextAlignment="Left"><Run Language="sk-sk" Text="plms"/></TextBlock>
-            <CheckBox x:Name="plmsCheck" HorizontalAlignment="Left" Margin="204,243,0,165" IsChecked="True" Width="81"/>
+            <CheckBox x:Name="plmsCheck" HorizontalAlignment="Left" Margin="204,243,0,165" Width="81"/>
+            <TextBlock HorizontalAlignment="Left" Margin="28,263,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="24" Width="156" FontSize="9" TextAlignment="Left"><Run Text="Try disabling plms if using optimized script if console "/><Run Language="sk-sk" Text="instantly closes."/></TextBlock>
 
         </Grid>
 
