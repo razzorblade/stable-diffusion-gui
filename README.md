@@ -8,7 +8,7 @@ Windows UI for Stable Diffusion
 ## Prerequisites
 - StableDiffusion and model weights locally (follow steps on [official github](https://github.com/CompVis/stable-diffusion))
 - [Anaconda installation](https://www.anaconda.com/) or miniconda/conda - needed to activate conda environment using Anaconda prompt.
-Please, **make sure you can run "python txt2img.py --help"** from the Anaconda prompt and that you have **ldm environment** active (following the official guide in previous point).
+Please, **make sure you can run "python txt2img.py --help"** from the Anaconda prompt and that you have **ldm environment** available (following the official guide in previous point).
 
 ## Keep in mind
 - When using optimized script, put it into /scripts/ folder of archive downloaded from official Stable Diffusion repository.
