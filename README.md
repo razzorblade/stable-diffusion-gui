@@ -10,6 +10,11 @@ Windows UI for Stable Diffusion
 - [Anaconda installation](https://www.anaconda.com/) or miniconda/conda - needed to activate conda environment using Anaconda prompt.
 Please, **make sure you can run "python txt2img.py --help"** from the Anaconda prompt and that you have **ldm environment** active (following the official guide in previous point).
 
+## Keep in mind
+- When using optimized script, put it into /scripts/ folder of archive downloaded from official Stable Diffusion repository.
+- It is possible that optimized script does not support PLMS, disable it if Anaconda prompt closes immediately.
+- img2img is now supported, but is an experimental feature.
+
 ## Steps
 1. Download the pre-release package from [github releases](https://github.com/razzorblade/stable-diffusion-gui/releases/tag/alpha-release)
 2. Open StableDiffusionGUI.exe
