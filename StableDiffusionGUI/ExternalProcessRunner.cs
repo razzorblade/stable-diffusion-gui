@@ -5,13 +5,14 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace StableDiffusionGUI
 {
     public static class ExternalProcessRunner
     {
-        public static void Run(string args, Action callback)
+        public static void Run(string args, Action<string> callback)
         {
             var workingDirectory = Directory.GetParent(new FileInfo(PersistantPreferencesData.Txt2ImgPath).DirectoryName).FullName;
             var process = new Process
@@ -26,9 +27,9 @@ namespace StableDiffusionGUI
                     WorkingDirectory = workingDirectory
                 }
             };
-            process.Exited += (object? s, EventArgs args) => callback();
-
+            process.Exited += (object? s, EventArgs args) => callback(workingDirectory);
             process.Start();
+
             // Pass multiple commands to cmd.exe
             using (var sw = process.StandardInput)
             {

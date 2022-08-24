@@ -20,7 +20,7 @@
         </DockPanel>
 
 
-        <Button x:Name="generateBtn" Content="Generate" HorizontalAlignment="Right" Margin="0,242,36,0" VerticalAlignment="Top" Height="43" Width="158" FontSize="21" Click="generateBtn_Click"/>
+        <Button x:Name="generateBtn" Content="Generate" HorizontalAlignment="Right" Margin="0,242,36,0" VerticalAlignment="Top" Height="35" Width="158" FontSize="21" Click="generateBtn_Click"/>
 
         <TextBox x:Name="promptBox" ScrollViewer.HorizontalScrollBarVisibility="Disabled"
          ScrollViewer.VerticalScrollBarVisibility="Auto" HorizontalAlignment="Left" Margin="28,30,0,0" PreviewMouseDown="promptBox_PreviewMouseDown" TextAlignment="Center" TextWrapping="Wrap" VerticalAlignment="Top" Width="546" Height="78" FontSize="18" MaxLines="12" MinLines="3" VerticalContentAlignment="Center" LostFocus="promptBox_LostFocus" ScrollViewer.CanContentScroll="True" />
@@ -34,7 +34,8 @@
         <TextBlock HorizontalAlignment="Left" Margin="28,209,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="24" Width="156" FontSize="18" TextAlignment="Left"><Run Language="sk-sk" Text="seed"/></TextBlock>
         <TextBox x:Name="seedBox" HorizontalAlignment="Left" Margin="204,209,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="52" Height="24" MaxLines="1" Text="1" VerticalContentAlignment="Center" FontSize="16"/>
         <Button x:Name="randomizeSeedBtn" Content="RND" HorizontalAlignment="Left" Margin="256,209,0,0" VerticalAlignment="Top" Height="24" Width="30" Click="randomizeSeedBtn_Click"/>
-        <TextBox x:Name="consoleBox" HorizontalAlignment="Left" Margin="28,297,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="546" Height="124" MaxLines="1200000" MinLines="3" IsReadOnly="True" Background="#FFEAEAEA"/>
+        <TextBox x:Name="consoleBox" ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+         ScrollViewer.VerticalScrollBarVisibility="Auto" HorizontalAlignment="Left" Margin="28,303,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="546" Height="118" MaxLines="1200000" MinLines="3" IsReadOnly="True" Background="#FFEAEAEA"/>
         <TextBlock HorizontalAlignment="Right" Margin="0,119,143,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="32" Width="129" FontSize="18" TextAlignment="Left"><Run Language="sk-sk" Text="height"/></TextBlock>
         <TextBlock HorizontalAlignment="Right" Margin="0,149,116,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="32" Width="156" FontSize="18" TextAlignment="Left"><Run Language="sk-sk" Text="ddim_steps"/></TextBlock>
         <TextBox x:Name="ddimBox" HorizontalAlignment="Right" Margin="0,149,36,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="80" Height="24" FontSize="16" MaxLines="1" Text="50" VerticalContentAlignment="Center"/>
@@ -42,6 +43,8 @@
         <Button x:Name="outdirBtn" Content="Set" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" HorizontalAlignment="Right" Margin="0,178,36,0" VerticalAlignment="Top" Height="24" Width="80" Click="outdirBtn_Click" FontSize="14"/>
         <TextBlock HorizontalAlignment="Right" Margin="0,207,116,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="24" Width="157" FontSize="18" TextAlignment="Left"><Run Language="sk-sk" Text="scale"/></TextBlock>
         <TextBox x:Name="scaleBox" HorizontalAlignment="Right" Margin="0,207,35,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="81" Height="24" FontSize="16" MaxLines="1" Text="7.5" VerticalContentAlignment="Center"/>
-
+        <TextBlock HorizontalAlignment="Left" Margin="28,240,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="24" Width="156" FontSize="18" TextAlignment="Left"><Run Language="sk-sk" Text="plms"/></TextBlock>
+        <CheckBox x:Name="plmsCheck" HorizontalAlignment="Left" Margin="204,243,0,165" IsChecked="True" Width="81"/>
+        <CheckBox x:Name="showoutputCheck" HorizontalAlignment="Left" Margin="484,282,0,126" IsChecked="True" Width="90" Content="show output"/>
     </Grid>
 </mah:MetroWindow>

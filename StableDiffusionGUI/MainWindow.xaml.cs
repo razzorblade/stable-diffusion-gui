@@ -1,6 +1,7 @@
 ﻿using MahApps.Metro.Controls;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -65,22 +66,41 @@ namespace StableDiffusionGUI
             var scale = scaleBox.Text;
             (string width, string height) size = (widthBox.Text, heightBox.Text);
 
-            //--H 512 --W 512 --n_iter 6 --plms --n_samples 1 --seed 87201
-            string send = "";
-            
-            if(string.IsNullOrEmpty(PersistantPreferencesData.OutDirPath))
-                send = $"--prompt \"{prompt}\" --W {size.width} --H {size.height} --n_samples " +
-                    $"{nsamples} --n_iter {niter} --ddim_steps {ddim} --seed {seed} --scale {scale} --plms";
-            else
-                send = $"--prompt \"{prompt}\" --W {size.width} --H {size.height} --outdir {PersistantPreferencesData.OutDirPath} --n_samples " +
-                    $"{nsamples} --n_iter {niter} --ddim_steps {ddim} --seed {seed} --scale {scale} --plms";
+            var sb = new StringBuilder();
+            sb.Append("--prompt \"").Append(prompt).Append("\" --W ").Append(size.width).Append(" --H ").Append(size.height).Append(" --n_samples ")
+              .Append(nsamples).Append(" --n_iter ").Append(niter).Append(" --ddim_steps ").Append(ddim).Append(" --seed ").Append(seed).Append(" --scale ").Append(scale);
 
-            send = send.Replace("\n", "").Replace("\r", "");
+            if (!string.IsNullOrEmpty(PersistantPreferencesData.OutDirPath))
+            {
+                sb.Append(" --outdir ").Append(PersistantPreferencesData.OutDirPath);
+            }
+
+            if(plmsCheck.IsChecked == true)
+            {
+                sb.Append(" --plms");
+            }
+
+            var args = sb.Replace("\n", "").Replace("\r", "").ToString();
+
+            consoleBox.AppendText($"<prompt>\"{prompt}\"\n<arguments> {args}\n");
 
             if (RunChecks())
             {
-                ExternalProcessRunner.Run(send, () => 
+                ExternalProcessRunner.Run(args, (workDir) => 
                 {
+                    this.Dispatcher.Invoke(() =>
+                    {
+                        if (showoutputCheck.IsChecked == true)
+                        {
+                            var outDir = System.IO.Path.Join(workDir, "outputs\\txt2img-samples");
+                            if (!string.IsNullOrWhiteSpace(PersistantPreferencesData.OutDirPath))
+                                outDir = PersistantPreferencesData.OutDirPath;
+
+                            Process.Start("explorer.exe", outDir);
+                        }
+
+                        consoleBox.ScrollToEnd();
+                    });
                 });
             }
         }
@@ -89,13 +109,13 @@ namespace StableDiffusionGUI
         {
             if(string.IsNullOrWhiteSpace(PersistantPreferencesData.AnacondaPath))
             {
-                consoleBox.AppendText("<run check> Error: Anaconda path not set. Please, use File->Preferences->Anaconda Installation to setup correct path.");
+                consoleBox.AppendText("<run check> Error: Anaconda path not set. Please, use File->Preferences->Anaconda Installation to setup correct path.\n");
                 return false;
             }
 
             if (string.IsNullOrWhiteSpace(PersistantPreferencesData.Txt2ImgPath))
             {
-                consoleBox.AppendText("<run check> Error: Txt2Img path not set. Please, use File->Preferences->Txt2Img path to setup correct path.");
+                consoleBox.AppendText("<run check> Error: Txt2Img path not set. Please, use File->Preferences->Txt2Img path to setup correct path.\n");
                 return false;
             }
 
