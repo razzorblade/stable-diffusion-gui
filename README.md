@@ -7,7 +7,7 @@ Windows UI for Stable Diffusion
 
 ## Prerequisites
 - StableDiffusion and model weights locally (follow steps on [official github](https://github.com/CompVis/stable-diffusion))
-- [Anaconda installation](https://www.anaconda.com/) 
+- [Anaconda installation](https://www.anaconda.com/) or miniconda/conda - needed to activate conda environment using Anaconda prompt
 
 ## Steps
 1. Download the pre-release package from [github releases](https://github.com/razzorblade/stable-diffusion-gui/releases/tag/alpha-release)
