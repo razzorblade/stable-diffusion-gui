@@ -13,7 +13,8 @@
         <DockPanel>
             <Menu DockPanel.Dock="Top" Background="White">
                 <MenuItem Header="_File">
-                    <MenuItem Header="_Save" />
+                    <MenuItem x:Name="saveMenu" Header="_Save" Click="saveMenu_Click"/>
+                    <MenuItem x:Name="loadMenu" Header="_Load" Click="loadMenu_Click"/>
                     <MenuItem x:Name="preferencesMenu" Header="_Preferences" Click="preferencesMenu_Click"/>
                 </MenuItem>
             </Menu>

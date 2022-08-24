@@ -56,6 +56,19 @@ namespace StableDiffusionGUI
             }
         }
 
+        internal void AssignFrom(SerializedCommand deserialized)
+        {
+            promptBox.Text = deserialized.Prompt;
+            nsamplesBox.Text = deserialized.Samples;
+            seedBox.Text = deserialized.Seed;
+            niterBox.Text = deserialized.Iter;
+            ddimBox.Text = deserialized.DdimSteps;
+            scaleBox.Text = deserialized.Scale;
+            widthBox.Text = deserialized.Width;
+            heightBox.Text = deserialized.Height;
+            plmsCheck.IsChecked = deserialized.Plms;
+        }
+
         private void generateBtn_Click(object sender, RoutedEventArgs e)
         {
             var prompt = promptBox.Text;
@@ -82,7 +95,7 @@ namespace StableDiffusionGUI
 
             var args = sb.Replace("\n", "").Replace("\r", "").ToString();
 
-            consoleBox.AppendText($"<prompt>\"{prompt}\"\n<arguments> {args}\n");
+            consoleBox.AppendText($"[Arguments]: {args}\n");
 
             if (RunChecks())
             {
@@ -164,6 +177,44 @@ namespace StableDiffusionGUI
         {
             var page = new Preferences();
             page.Show();
+        }
+
+        private void saveMenu_Click(object sender, RoutedEventArgs e)
+        {
+            // save current prompt and args
+            var dialog = new Ookii.Dialogs.Wpf.VistaSaveFileDialog()
+            {
+                AddExtension = true,
+                Filter = "sdc|*.sdc",
+                OverwritePrompt = true,
+                DefaultExt = ".sdc"
+            };
+            dialog.ShowDialog();
+
+            if (!string.IsNullOrEmpty(dialog.FileName))
+            {
+                var path = dialog.FileName;
+                var serializedCmd = SerializedCommand.Generate(this);
+                serializedCmd.Save(path);
+            }
+        }
+
+        private void loadMenu_Click(object sender, RoutedEventArgs e)
+        {
+            var dialog = new Ookii.Dialogs.Wpf.VistaOpenFileDialog()
+            {
+                AddExtension = true,
+                Filter = "sdc|*.sdc",
+                DefaultExt = ".sdc"
+            };
+            dialog.ShowDialog();
+
+            if (!string.IsNullOrEmpty(dialog.FileName))
+            {
+                var path = dialog.FileName;
+                var deserializedCmd = SerializedCommand.Load(path);
+                AssignFrom(deserializedCmd);
+            }
         }
     }
 }
