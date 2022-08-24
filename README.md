@@ -1,6 +1,8 @@
 # stable-diffusion-gui
 Windows UI for Stable Diffusion
 
+![showcase](https://raw.githubusercontent.com/razzorblade/stable-diffusion-gui/main/img/sdgui.gif)
+
 # Installation
 
 ## Prerequisites
