@@ -8,7 +8,7 @@ Windows UI for Stable Diffusion
 - [Anaconda installation](https://www.anaconda.com/)
 
 ## Steps
-1. Download the pre-release package from github
+1. Download the pre-release package from [github releases](https://github.com/razzorblade/stable-diffusion-gui/releases/tag/alpha-release)
 2. Open StableDiffusionGUI.exe
 3. (install NET Framework if prompted)
 4. Open File->Preferences and assign Anaconda+Txt2img.py file
