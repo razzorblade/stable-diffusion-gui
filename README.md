@@ -16,7 +16,7 @@ Please, **make sure you can run "python txt2img.py --help"** from the Anaconda p
 - img2img is now supported, but is an experimental feature.
 
 ## Steps
-1. Download the pre-release package from [github releases](https://github.com/razzorblade/stable-diffusion-gui/releases/tag/alpha-release)
+1. Download the pre-release package from [github releases](https://github.com/razzorblade/stable-diffusion-gui/releases/tag/alpha-release-v0.2.0)
 2. Open StableDiffusionGUI.exe
 3. (install NET Framework for desktop applications if prompted)
 4. Open File->Preferences and assign Anaconda+Txt2img.py file (Anaconda installation should point to "Anaconda" directory which contains bin,DLLs,condabin etc; txt2img file should be assigned from stable-diffusion-main/scripts)
