@@ -21,3 +21,8 @@ Please, **make sure you can run "python txt2img.py --help"** from the Anaconda p
 3. (install NET Framework for desktop applications if prompted)
 4. Open File->Preferences and assign Anaconda+Txt2img.py file (Anaconda installation should point to "Anaconda" directory which contains bin,DLLs,condabin etc; txt2img file should be assigned from stable-diffusion-main/scripts)
 5. Run some prompts, tweak the values
+
+# Development
+To add new funcionalities or edit existing, only thing you need is Visual Studio with WPF (C#). Open the solution and everything should work out of the box. Nuget packages used:
+- [MahApps Metro](https://www.nuget.org/packages/MahApps.Metro)
+- [Ookii Dialogs](https://www.nuget.org/packages/Ookii.Dialogs.Wpf)
