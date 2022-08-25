@@ -24,6 +24,7 @@ namespace StableDiffusionGUI
     public partial class MainWindow : MetroWindow
     {
         private bool _isPromptReset = false;
+        private bool _isGenerationRunning = false;
         private TextWriter? _writer = null;
 
         public MainWindow()
@@ -40,21 +41,12 @@ namespace StableDiffusionGUI
             var rnd = new Random();
             seedBox.Text = rnd.Next(0, int.MaxValue).ToString();
 
-            _writer = new ControlWriter(consoleBox);
+            _writer = new ControlWriter(consoleBox, this.Dispatcher);
             Console.SetOut(_writer);
             Console.SetError(_writer);
 
             // load preferences
             PersistentPreferencesData.Load();
-        }
-
-        private void promptBox_PreviewMouseDown(object sender, MouseButtonEventArgs e)
-        {
-            if (e.LeftButton.HasFlag(MouseButtonState.Pressed) && !_isPromptReset)
-            {
-                _isPromptReset = true;
-                promptBox.Text = "";
-            }
         }
 
         internal void AssignFrom(SerializedCommand deserialized)
@@ -106,7 +98,7 @@ namespace StableDiffusionGUI
 
             consoleBox.AppendText($"[Arguments]: {args}\n");
 
-            if (RunChecks())
+            if (RunChecks(true))
             {
                 ExternalProcessRunner.Run(PersistentPreferencesData.Img2ImgPath, args, (workDir) =>
                 {
@@ -118,14 +110,18 @@ namespace StableDiffusionGUI
                             if (!string.IsNullOrWhiteSpace(PersistentPreferencesData.OutDirPath))
                                 outDir = PersistentPreferencesData.OutDirPath;
 
-                            Process.Start("explorer.exe", outDir);
+                            Process.Start(new ProcessStartInfo() { FileName = outDir, UseShellExecute = true });
                         }
 
                         consoleBox.ScrollToEnd();
+
+                        _isGenerationRunning = false;
+                        generateBtn.Content = "Generate";
                     });
-                });
+                }, true);
             }
         }
+
         private void Txt2ImgGenerate()
         {
             var prompt = promptBox.Text;
@@ -154,7 +150,7 @@ namespace StableDiffusionGUI
 
             consoleBox.AppendText($"[Arguments]: {args}\n");
 
-            if (RunChecks())
+            if (RunChecks(false))
             {
                 ExternalProcessRunner.Run(PersistentPreferencesData.Txt2ImgPath, args, (workDir) =>
                 {
@@ -166,19 +162,70 @@ namespace StableDiffusionGUI
                             if (!string.IsNullOrWhiteSpace(PersistentPreferencesData.OutDirPath))
                                 outDir = PersistentPreferencesData.OutDirPath;
 
-                            Process.Start("explorer.exe", outDir);
+                            Process.Start(new ProcessStartInfo() { FileName = outDir, UseShellExecute = true});
                         }
 
                         consoleBox.ScrollToEnd();
+
+                        _isGenerationRunning = false;
+                        generateBtn.Content = "Generate";
                     });
                 });
             }
         }
 
+        
+        /// <summary>
+        /// Check if all data in preferences are correctly setup
+        /// </summary>
+        /// <returns></returns>
+        private bool RunChecks(bool img2img)
+        {
+            if(string.IsNullOrWhiteSpace(PersistentPreferencesData.AnacondaPath))
+            {
+                consoleBox.AppendText("<run check> Error: Anaconda path not set. Please, use File->Preferences->Anaconda Installation to setup correct path.\n");
+                return false;
+            }
+
+            if (img2img)
+            {
+                if (string.IsNullOrWhiteSpace(PersistentPreferencesData.Img2ImgPath))
+                {
+                    consoleBox.AppendText("<run check> Error: Img2Img path not set. Please, use File->Preferences->Img2Img file to setup correct path.\n");
+                    return false;
+                }
+            }
+            else
+            {
+                if (string.IsNullOrWhiteSpace(PersistentPreferencesData.Txt2ImgPath))
+                {
+                    consoleBox.AppendText("<run check> Error: Txt2Img path not set. Please, use File->Preferences->Txt2Img file to setup correct path.\n");
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        #region WPF Events
         private void generateBtn_Click(object sender, RoutedEventArgs e)
         {
+            if (_isGenerationRunning)
+            {
+                // stop process if running
+                var running = ExternalProcessRunner.RunningGeneration;
+                if (running != null)
+                {
+                    running.Kill();
+                }
+
+                _isGenerationRunning = false;
+                generateBtn.Content = "Generate";
+                return;
+            }
+
             // check which mode we are in
-            if(imgToImgGroup.Visibility == Visibility.Visible)
+            if (imgToImgGroup.Visibility == Visibility.Visible)
             {
                 //img2img mode
                 Img2ImgGenerate();
@@ -187,24 +234,12 @@ namespace StableDiffusionGUI
             {
                 Txt2ImgGenerate();
             }
+
+            _isGenerationRunning = true;
+            consoleBox.Clear();
+            generateBtn.Content = "Stop";
         }
 
-        private bool RunChecks()
-        {
-            if(string.IsNullOrWhiteSpace(PersistentPreferencesData.AnacondaPath))
-            {
-                consoleBox.AppendText("<run check> Error: Anaconda path not set. Please, use File->Preferences->Anaconda Installation to setup correct path.\n");
-                return false;
-            }
-
-            if (string.IsNullOrWhiteSpace(PersistentPreferencesData.Txt2ImgPath))
-            {
-                consoleBox.AppendText("<run check> Error: Txt2Img path not set. Please, use File->Preferences->Txt2Img path to setup correct path.\n");
-                return false;
-            }
-
-            return true;
-        }
 
         private void randomizeSeedBtn_Click(object sender, RoutedEventArgs e)
         {
@@ -220,9 +255,19 @@ namespace StableDiffusionGUI
                 _isPromptReset = false;
             }
         }
+        private void promptBox_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.LeftButton.HasFlag(MouseButtonState.Pressed) && !_isPromptReset)
+            {
+                _isPromptReset = true;
+                promptBox.Text = "";
+            }
+        }
 
         private void outdirBtn_Click(object sender, RoutedEventArgs e)
         {
+            // set output directory and save it to preferences.dat file
+
             var dialog = new Ookii.Dialogs.Wpf.VistaFolderBrowserDialog()
             {
                 SelectedPath = String.IsNullOrWhiteSpace(PersistentPreferencesData.OutDirPath) ? "" : PersistentPreferencesData.OutDirPath,
@@ -246,6 +291,7 @@ namespace StableDiffusionGUI
 
         private void preferencesMenu_Click(object sender, RoutedEventArgs e)
         {
+            // open preferences window
             var page = new Preferences();
             page.Show();
         }
@@ -290,6 +336,11 @@ namespace StableDiffusionGUI
 
         private void MetroWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
+            if(ExternalProcessRunner.RunningGeneration != null)
+            {
+                ExternalProcessRunner.RunningGeneration.Kill();
+            }
+
             Environment.Exit(0);
         }
 
@@ -318,17 +369,6 @@ namespace StableDiffusionGUI
             }
         }
 
-        private void PreviewImage(string inputImage)
-        {
-            inputImage = inputImage.Replace("\\", "/");
-            var bitmap = new BitmapImage();
-            bitmap.BeginInit();
-            bitmap.UriSource = new Uri(inputImage);
-            bitmap.CacheOption = BitmapCacheOption.OnLoad;
-            bitmap.EndInit();
-            previewImageBox.Source = bitmap;
-        }
-
         private void txt2img_Click(object sender, RoutedEventArgs e)
         {
             txtToImgGroup.Visibility = Visibility.Visible;
@@ -341,6 +381,19 @@ namespace StableDiffusionGUI
             txtToImgGroup.Visibility = Visibility.Hidden;
             imgToImgGroup.Visibility = Visibility.Visible;
             promptBox.Width = 446;
+        }
+
+        #endregion
+
+        private void PreviewImage(string inputImage)
+        {
+            inputImage = inputImage.Replace("\\", "/");
+            var bitmap = new BitmapImage();
+            bitmap.BeginInit();
+            bitmap.UriSource = new Uri(inputImage);
+            bitmap.CacheOption = BitmapCacheOption.OnLoad;
+            bitmap.EndInit();
+            previewImageBox.Source = bitmap;
         }
     }
 }

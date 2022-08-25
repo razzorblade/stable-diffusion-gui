@@ -68,7 +68,7 @@
          ScrollViewer.VerticalScrollBarVisibility="Auto" HorizontalAlignment="Left" Margin="28,303,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="546" Height="118" MaxLines="1200000" MinLines="3" IsReadOnly="True" Background="#FFEAEAEA" FontSize="11" FontFamily="Consolas"/>
 
         <TextBlock HorizontalAlignment="Left" Margin="28,209,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="24" Width="156" FontSize="18" TextAlignment="Left" FontFamily="Consolas"><Run Language="sk-sk" Text="seed"/></TextBlock>
-        <TextBox x:Name="seedBox" HorizontalAlignment="Left" Margin="204,209,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="52" Height="24" MaxLines="1" Text="1" VerticalContentAlignment="Center" FontSize="16"/>
+        <TextBox x:Name="seedBox" HorizontalAlignment="Left" Margin="204,209,0,0" TextWrapping="NoWrap" VerticalAlignment="Top" Width="52" Height="24" MaxLines="1" Text="1" VerticalContentAlignment="Center" FontSize="11"/>
         <Button x:Name="randomizeSeedBtn" Content="RND" HorizontalAlignment="Left" Margin="256,209,0,0" VerticalAlignment="Top" Height="24" Width="30" Click="randomizeSeedBtn_Click"/>
 
         <TextBlock HorizontalAlignment="Left" Margin="28,149,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="24" Width="156" FontSize="18" TextAlignment="Left"><Run Language="sk-sk" Text="n_iter"/></TextBlock>
