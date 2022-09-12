@@ -3,6 +3,10 @@ Windows UI for Stable Diffusion
 
 ![showcase](https://raw.githubusercontent.com/razzorblade/stable-diffusion-gui/main/img/sdgui.gif)
 
+# Archivation
+
+As there are much more advanced stable-diffusion UIs working also without a localhost server, I am archiving this project. In latest changes I have introduced regex reading of SD outputs and progress bar in UI showing actual iteration. The next thing would be to preload the model so it won't take that long to run the generation. If you are interested in how the python was called and how anaconda env was switched, refer to [ExternalProcessRunner.cs](https://github.com/razzorblade/stable-diffusion-gui/blob/main/StableDiffusionGUI/ExternalProcessRunner.cs)
+
 # Installation
 
 ## Prerequisites
