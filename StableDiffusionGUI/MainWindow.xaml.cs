@@ -27,6 +27,8 @@ namespace StableDiffusionGUI
         private bool _isGenerationRunning = false;
         private TextWriter? _writer = null;
 
+        private int currentIteration, maxIterations;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -62,7 +64,7 @@ namespace StableDiffusionGUI
             plmsCheck.IsChecked = deserialized.Plms;
         }
 
-        private void Img2ImgGenerate()
+        private bool Img2ImgGenerate()
         {
             var prompt = promptBox.Text;
             var nsamples = nsamplesBox.Text;
@@ -72,6 +74,9 @@ namespace StableDiffusionGUI
             var scale = scaleBox.Text;
             var strength = strengthBox.Text;
 
+            currentIteration = 1;
+            maxIterations = int.Parse(niter);
+            progressIterationText.Text = $"0/{maxIterations}";
 
             var sb = new StringBuilder();
             sb.Append("--prompt \"").Append(prompt).Append("\" --n_samples ").Append(nsamples).Append(" --n_iter ").Append(niter)
@@ -98,6 +103,7 @@ namespace StableDiffusionGUI
 
             consoleBox.AppendText($"[Arguments]: {args}\n");
 
+            var iterationCount = false;
             if (RunChecks(true))
             {
                 ExternalProcessRunner.Run(PersistentPreferencesData.Img2ImgPath, args, (workDir) =>
@@ -118,11 +124,37 @@ namespace StableDiffusionGUI
                         _isGenerationRunning = false;
                         generateBtn.Content = "Generate";
                     });
-                }, true);
+                },
+
+                percentage =>
+                {
+                    this.Dispatcher?.Invoke(() =>
+                    {
+                        if (percentage == 0)
+                            iterationCount = false;
+
+                        if (generatingProgressBar.Value == 100)
+                        {
+                            generatingProgressBar.Value = 0;
+                            progressIterationText.Text = $"{currentIteration}/{maxIterations}";
+
+                            currentIteration++;
+                            iterationCount = true;
+                        }
+
+                        if (!iterationCount)
+                            generatingProgressBar.Value = percentage;
+                    });
+                },
+                true);
+
+                return true;
             }
+
+            return false;
         }
 
-        private void Txt2ImgGenerate()
+        private bool Txt2ImgGenerate()
         {
             var prompt = promptBox.Text;
             var nsamples = nsamplesBox.Text;
@@ -131,6 +163,10 @@ namespace StableDiffusionGUI
             var ddim = ddimBox.Text;
             var scale = scaleBox.Text;
             (string width, string height) size = (widthBox.Text, heightBox.Text);
+
+            currentIteration = 1;
+            maxIterations = int.Parse(niter);
+            progressIterationText.Text = $"0/{maxIterations}";
 
             var sb = new StringBuilder();
             sb.Append("--prompt \"").Append(prompt).Append("\" --W ").Append(size.width).Append(" --H ").Append(size.height).Append(" --n_samples ")
@@ -149,6 +185,8 @@ namespace StableDiffusionGUI
             var args = sb.Replace("\n", "").Replace("\r", "").ToString();
 
             consoleBox.AppendText($"[Arguments]: {args}\n");
+
+            var iterationCount = false;
 
             if (RunChecks(false))
             {
@@ -170,8 +208,35 @@ namespace StableDiffusionGUI
                         _isGenerationRunning = false;
                         generateBtn.Content = "Generate";
                     });
-                });
+                },
+                
+                //(percentage) => generatingProgressBar.Value = percentage/100d
+                percentage =>
+                    {
+                        this.Dispatcher?.Invoke(() =>
+                        {
+                            if (percentage == 0)
+                                iterationCount = false;
+
+                            if(generatingProgressBar.Value == 100)
+                            {
+                                generatingProgressBar.Value = 0;
+                                progressIterationText.Text = $"{currentIteration}/{maxIterations}";
+
+                                currentIteration++;
+                                iterationCount = true;
+                            }
+
+                            if(!iterationCount)
+                                generatingProgressBar.Value = percentage;
+                        });
+                    }
+                );
+
+                return true;
             }
+
+            return false;
         }
 
         
@@ -224,20 +289,24 @@ namespace StableDiffusionGUI
                 return;
             }
 
+            bool result;
             // check which mode we are in
             if (imgToImgGroup.Visibility == Visibility.Visible)
             {
                 //img2img mode
-                Img2ImgGenerate();
+                result = Img2ImgGenerate();
             }
             else
             {
-                Txt2ImgGenerate();
+                result = Txt2ImgGenerate();
             }
 
-            _isGenerationRunning = true;
-            consoleBox.Clear();
-            generateBtn.Content = "Stop";
+            if (result)
+            {
+                _isGenerationRunning = true;
+                consoleBox.Clear();
+                generateBtn.Content = "Stop";
+            }
         }
 
 

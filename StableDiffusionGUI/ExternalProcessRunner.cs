@@ -46,11 +46,11 @@ namespace StableDiffusionGUI
         /// <param name="pythonProcess">Path to python process</param>
         /// <param name="args">Argument chain (for example --prompt "..." --W 512 --H 512)</param>
         /// <param name="callback">Called on process exit</param>
-        public static void Run(string pythonProcess, string args, Action<string> callback, bool img2img = false)
+        public static void Run(string pythonProcess, string args, Action<string> callback, Action<int> reportCallback, bool img2img = false)
         {
             RunningGeneration = new();
 
-            var task = Task.Run(() => BackgroundRun(pythonProcess, args, callback, img2img));
+            var task = Task.Run(() => BackgroundRun(pythonProcess, args, callback, reportCallback, img2img));
             RunningGeneration.BackgroundRunner = task;
         }
 
@@ -60,7 +60,7 @@ namespace StableDiffusionGUI
         /// <param name="pythonProcess"></param>
         /// <param name="args"></param>
         /// <param name="callback"></param>
-        private static void BackgroundRun(string pythonProcess, string args, Action<string> callback, bool img2img = false)
+        private static void BackgroundRun(string pythonProcess, string args, Action<string> callback, Action<int> reportProgress, bool img2img = false)
         {
             // preferences are already checked to not be empty/null ->
 #pragma warning disable CS8602 // Dereference of a possibly null reference.
@@ -80,8 +80,8 @@ namespace StableDiffusionGUI
                     RedirectStandardInput = true,
                     RedirectStandardError = !img2img,
                     UseShellExecute = false,
-                    CreateNoWindow = !img2img,
-                    WorkingDirectory = workingDirectory
+                    CreateNoWindow = !img2img, // windowless img2img is not working correctly for now
+                    WorkingDirectory = workingDirectory,
                 }
             };
             process.Exited += (object? s, EventArgs args) =>
@@ -115,7 +115,7 @@ namespace StableDiffusionGUI
 
             // move to new thread ->
             ThreadStart stdThr = new(() => ListenOutput(process.StandardOutput));
-            ThreadStart errThr = new(() => ListenOutput(process.StandardError));
+            ThreadStart errThr = new(() => ListenError(process.StandardError, reportProgress));
 
             Thread std = new(stdThr);
             Thread err = new(errThr);
@@ -145,6 +145,40 @@ namespace StableDiffusionGUI
                 {
                     var line = process.ReadLine();
                     Console.WriteLine(line);
+                }
+            }
+            catch (ThreadInterruptedException ex)
+            {
+                Console.WriteLine("\nStream interrupted: " + ex.Message);
+            }
+        }
+
+        private static void ListenError(StreamReader process, Action<int> report)
+        {
+            // read multiple output lines
+            try
+            {
+                while (!process.EndOfStream)
+                {
+                    var line = process.ReadLine();
+                    //Console.WriteLine(line);
+
+                    // process the line for progress
+                    if (!string.IsNullOrEmpty(line))
+                    {
+                        var match = Regex.Match(line, ".* {1,2}([0-9]*)%");
+                        if (match.Success && match.Groups.Count > 1)
+                        {
+                            var percentage = match.Groups[1].Value;
+                            
+                            if(int.TryParse(percentage, out var percentageValue))
+                                report(percentageValue);
+                        }
+                        else
+                        {
+                            Console.WriteLine(line);
+                        }
+                    }
                 }
             }
             catch (ThreadInterruptedException ex)

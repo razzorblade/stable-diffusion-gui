@@ -8,7 +8,7 @@
         xmlns:local="clr-namespace:StableDiffusionGUI"
         mc:Ignorable="d"
         Closing="MetroWindow_Closing"
-        Title="Stable Diffusion GUI" Height="460" Width="610" Foreground="Black" WindowTitleBrush="#FF777777" Initialized="MetroWindow_Initialized" ResizeMode="CanMinimize" Background="White">
+        Title="Stable Diffusion GUI" Height="510" Width="610" Foreground="Black" WindowTitleBrush="#FF777777" Initialized="MetroWindow_Initialized" ResizeMode="CanMinimize" Background="White">
     <Grid Background="White" Margin="0,0,0,-6">
 
         <DockPanel>
@@ -36,6 +36,7 @@
             <TextBlock HorizontalAlignment="Left" Margin="28,240,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="24" Width="156" FontSize="18" TextAlignment="Left"><Run Language="sk-sk" Text="plms"/></TextBlock>
             <CheckBox x:Name="plmsCheck" HorizontalAlignment="Left" Margin="204,243,0,165" Width="81"/>
             <TextBlock HorizontalAlignment="Left" Margin="28,263,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="24" Width="156" FontSize="9" TextAlignment="Left"><Run Text="Try disabling plms if using optimized script if console "/><Run Language="sk-sk" Text="instantly closes."/></TextBlock>
+            <ProgressBar x:Name="generatingProgressBar" HorizontalAlignment="Left" Height="17" Margin="28,429,0,0" VerticalAlignment="Top" Width="546"/>
 
         </Grid>
 
@@ -75,5 +76,6 @@
         <TextBox x:Name="niterBox" HorizontalAlignment="Left" Margin="204,149,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="82" Height="24" FontSize="16" MaxLines="1" Text="4" VerticalContentAlignment="Center"/>
         <TextBlock HorizontalAlignment="Left" Margin="28,178,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="25" Width="156" FontSize="18" TextAlignment="Left"><Run Language="sk-sk" Text="n_samples"/></TextBlock>
         <TextBox x:Name="nsamplesBox" HorizontalAlignment="Left" Margin="204,178,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="82" Height="24" FontSize="16" MaxLines="1" Text="1" VerticalContentAlignment="Center"/>
+        <TextBlock x:Name="progressIterationText" HorizontalAlignment="Left" Margin="416,446,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="24" Width="156" FontSize="13" TextAlignment="Right" FontFamily="Consolas" Text="0/0"/>
     </Grid>
 </mah:MetroWindow>
